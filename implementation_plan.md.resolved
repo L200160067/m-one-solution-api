@@ -1,0 +1,190 @@
+# M-One Solution API — Laravel + Filament CMS
+
+Build a production-ready Laravel 12 backend with Filament v3 admin panel and a RESTful JSON API. The existing fresh-install Laravel project at `d:\GitHub\m-one-solution-api` will be the target. No Filament or CMS packages are installed yet.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Database Driver**: The [.env](file:///d:/GitHub/m-one-solution-api/.env) currently uses **SQLite** (local dev). For production (cPanel), this should be switched to **MySQL**. The migrations are written to be DB-agnostic but please confirm whether this project is being developed locally with SQLite or already targeting MySQL now.
+
+> [!IMPORTANT]
+> **Image Storage**: `spatie/laravel-medialibrary` will store uploaded images to `storage/app/public`. For production on cPanel, a symlink `public/storage` → `storage/app/public` must be created (`php artisan storage:link`). If the plan is to use a cloud CDN (Cloudflare R2, S3, etc.), please let me know and we can configure it accordingly.
+
+> [!NOTE]
+> **Filament Admin URL**: The Filament panel will be accessible at `/admin`. The default admin guard is used. A seeder will create the first Super Admin user.
+
+---
+
+## Proposed Changes
+
+### Phase 1 — Package Dependencies
+
+Install via `composer require`:
+
+| Package | Purpose |
+|---|---|
+| `filament/filament:^3.0` | Admin Panel CMS |
+| `spatie/laravel-medialibrary:^11.0` | File/image uploads with WebP conversion |
+| `spatie/laravel-permission:^6.0` | RBAC (roles & permissions) |
+
+#### [MODIFY] [composer.json](file:///d:/GitHub/m-one-solution-api/composer.json)
+Add the three packages above to `require`.
+
+---
+
+### Phase 2 — Configuration & Security
+
+#### [MODIFY] [.env](file:///d:/GitHub/m-one-solution-api/.env)
+- `APP_NAME=M-One Solution API`
+- `CACHE_STORE=file` (switch from database to file cache for simplicity; can upgrade to Redis later)
+- `FRONTEND_URL=http://localhost:3000` (overridden in production to `https://m-one-solution.com`)
+
+#### [MODIFY] [config/cors.php](file:///d:/GitHub/m-one-solution-api/config/cors.php)
+- `allowed_origins` → read from `env('FRONTEND_URL')` — restricts API access to the Next.js frontend only.
+
+---
+
+### Phase 3 — Models & Migrations
+
+Nine new migrations + Eloquent models (all with `SoftDeletes` where appropriate):
+
+#### [NEW] `database/migrations/…_create_categories_table.php`
+Fields: `id`, `name`, `slug` (unique), `timestamps`
+
+#### [NEW] `database/migrations/…_create_posts_table.php`
+Fields: `id`, `title`, `slug` (unique), `excerpt` (text), `content` (longText), `category_id` (FK, nullable), `author_id` (FK to users), `published_at` (timestamp, nullable), `timestamps`, `softDeletes`
+
+#### [NEW] `database/migrations/…_create_services_table.php`
+Fields: `id`, `title`, `slug` (unique), `category` (string), `short_description` (text), `full_description` (longText), `features` (JSON), `benefits` (JSON), `keywords` (JSON), `order_column` (int), `timestamps`
+
+#### [NEW] `database/migrations/…_create_projects_table.php`
+Fields: `id`, `title`, `slug`, `category` (string), `description` (text), `client_name` (nullable), `project_url` (nullable), `is_featured` (boolean, default false), `order_column` (int), `timestamps`
+
+#### [NEW] `database/migrations/…_create_team_members_table.php`
+Fields: `id`, `name`, `role`, `social_linkedin` (nullable), `social_github` (nullable), `social_instagram` (nullable), `order_column` (int), `timestamps`
+
+#### [NEW] `database/migrations/…_create_alumnis_table.php`
+Fields: `id`, `name`, `school`, `batch_period` (string), `order_column` (int), `timestamps`
+
+#### [NEW] `database/migrations/…_create_testimonials_table.php`
+Fields: `id`, `name`, `role`, `company`, `content` (text), `rating` (int 1-5), `is_active` (boolean, default true), `timestamps`
+
+#### [NEW] `database/migrations/…_create_partners_table.php`
+Fields: `id`, `name`, `order_column` (int), `timestamps`
+
+#### [NEW] `database/migrations/…_create_settings_table.php`
+Fields: `id`, `key` (string, unique), `value` (text, nullable), `timestamps`
+
+**Models** (one per entity, in `app/Models/`): `Category`, `Post`, `Service`, `Project`, `TeamMember`, `Alumni`, `Testimonial`, `Partner`, `Setting`
+
+All image-bearing models (`Post`, `Service`, `Project`, `TeamMember`, `Alumni`, `Testimonial`, `Partner`) implement `HasMedia` / `InteractsWithMedia` from Spatie MediaLibrary.
+
+---
+
+### Phase 4 — Filament Admin Resources
+
+Filament v3 Resources are generated in `app/Filament/Resources/`. Each resource provides full CRUD forms + list tables.
+
+| Resource | Notable Fields |
+|---|---|
+| `CategoryResource` | name, slug (auto-generated) |
+| `PostResource` | title, slug, category (select), rich text content, image upload, published_at (date picker), author (auto-set to current user) |
+| `ServiceResource` | title, slug, category, descriptions, features/benefits/keywords (repeater fields), image |
+| `ProjectResource` | title, category, description, client, URL, is_featured toggle, image |
+| `TeamMemberResource` | name, role, socials, image, drag-sortable order |
+| `AlumniResource` | name, school, batch_period (select/text), image |
+| `TestimonialResource` | name, role, company, content, rating (star select 1-5), is_active toggle, image |
+| `PartnerResource` | name, logo image upload, drag-sortable order |
+| `SettingResource` | key-value pairs (custom page, not a standard resource) |
+
+**RBAC via Spatie Permission**:
+- Role `super_admin`: access to all resources + Settings page
+- Role `editor`: access to Post, Service, Project, TeamMember, Alumni, Testimonial, Partner only
+
+Each resource's `canAccess()` / `canCreate()` etc. guards will check role.
+
+---
+
+### Phase 5 — REST API Endpoints
+
+#### [NEW] [routes/api.php](file:///d:/GitHub/m-one-solution-api/routes/api.php)
+
+All routes are public (read-only GET), protected only by CORS and rate limiting:
+
+```
+GET /api/posts              → PostController@index   (paginated, published only)
+GET /api/posts/{slug}       → PostController@show
+GET /api/services           → ServiceController@index
+GET /api/services/{slug}    → ServiceController@show
+GET /api/projects           → ProjectController@index  (?featured=true filter)
+GET /api/team               → TeamController@index
+GET /api/alumni             → AlumniController@index   (grouped by batch_period)
+GET /api/testimonials       → TestimonialController@index  (is_active=true only)
+GET /api/partners           → PartnerController@index
+GET /api/settings           → SettingController@index  (returns {key: value} map)
+```
+
+**API Resource transformers** (`app/Http/Resources/`): One resource class per entity to shape the JSON response and include media URLs.
+
+**Cache strategy** (file cache):
+- Each endpoint result is cached with a tag like `cache()->remember('posts.index', 3600, fn() => ...)`
+- A model `Observer` or `saved`/`deleted` event hook calls `Cache::forget(...)` to auto-bust cache on admin save.
+
+---
+
+### Phase 6 — Security & Hardening
+
+#### [MODIFY] [app/Http/Middleware/…](file:///d:/GitHub/m-one-solution-api/app/Http)
+- **CORS**: `config/cors.php` — `allowed_origins` restricted to `FRONTEND_URL`
+- **Rate Limiting**: In `bootstrap/app.php`, define a `api` throttle limit of 60 requests/minute per IP
+- **JSON-only**: Register a global middleware on `/api/*` to force `Accept: application/json` — this ensures Laravel returns JSON 422/404/500 instead of HTML
+
+**Standardized error response** via `bootstrap/app.php` exception handler:
+```json
+{"success": false, "message": "...", "errors": {...}}
+```
+
+---
+
+### Phase 7 — Seeders
+
+#### [MODIFY] [database/seeders/DatabaseSeeder.php](file:///d:/GitHub/m-one-solution-api/database/seeders/DatabaseSeeder.php)
+- Create Spatie roles: `super_admin`, `editor`
+- Create first admin user: `admin@m-one-solution.com` / password: `password` (changeable)
+- Assign `super_admin` role
+- Optionally: 3–5 dummy posts, 2 services, 2 projects via factories
+
+---
+
+## Verification Plan
+
+### API Tests (Terminal)
+After `php artisan migrate --seed`, run:
+
+```bash
+# Confirm all routes are registered
+php artisan route:list --path=api
+
+# Test a GET endpoint (requires php artisan serve running)
+curl http://localhost:8000/api/posts
+curl http://localhost:8000/api/settings
+```
+
+Expected: `200 OK` with `{"data": [...], "links": {...}, "meta": {...}}` JSON.
+
+### Manual Verification (Browser)
+1. Start local server: `php artisan serve`
+2. Open `http://localhost:8000/admin` → should redirect to Filament login
+3. Log in with `admin@m-one-solution.com` / `password`
+4. Navigate through all Resources and confirm forms load
+5. Create one Blog Post, one Service — confirm they appear
+6. Open `http://localhost:8000/api/posts` in browser — confirm the new post is in the JSON response
+7. Open `http://localhost:8000/api/settings` — confirm settings key-value map returns
+
+### Automated Tests
+```bash
+php artisan test
+```
+Existing default tests should still pass. New feature tests will be added for API endpoints.

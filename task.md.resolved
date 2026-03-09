@@ -1,0 +1,67 @@
+# M-One Solution API — Laravel Filament CMS
+
+## Phase 1: Package Installation
+- [ ] Install Filament v3 (`filament/filament`)
+- [ ] Install Spatie Media Library (`spatie/laravel-medialibrary`) + image optimization
+- [ ] Install Spatie Laravel Permission (`spatie/laravel-permission`)
+- [ ] Install Laravel Sanctum (for API token auth, already included in L12)
+- [ ] Install `fruitcake/laravel-cors` or use built-in Laravel CORS
+
+## Phase 2: Core Setup
+- [ ] Configure [.env](file:///d:/GitHub/m-one-solution-api/.env) (App name, DB, Cache, etc.)
+- [ ] Configure `config/cors.php` — whitelist Next.js domain
+- [ ] Create Filament admin panel user seeder (Super Admin)
+- [ ] Add Spatie Permission roles: `super_admin`, `editor`
+
+## Phase 3: Models & Migrations
+- [ ] `categories` migration + Model (for post categories)
+- [ ] `posts` (Blog) migration + Model + Media relationship
+- [ ] `services` migration + Model + Media relationship
+- [ ] `projects` (Portfolio) migration + Model + Media relationship
+- [ ] `team_members` migration + Model + Media relationship
+- [ ] `alumnis` migration + Model + Media relationship
+- [ ] `testimonials` migration + Model + Media relationship
+- [ ] `partners` migration + Model + Media relationship
+- [ ] `settings` (key-value store) migration + Model
+
+## Phase 4: Filament Resources (Admin Dashboard)
+- [ ] `CategoryResource` (CRUD)
+- [ ] `PostResource` (Blog — Rich Editor, image upload, published_at)
+- [ ] `ServiceResource` (CRUD + JSON fields for features/benefits/keywords)
+- [ ] `ProjectResource` (CRUD + featured toggle)
+- [ ] `TeamMemberResource` (CRUD + order_column sort)
+- [ ] `AlumniResource` (CRUD + batch grouping)
+- [ ] `TestimonialResource` (CRUD + active toggle + rating)
+- [ ] `PartnerResource` (CRUD + logo upload)
+- [ ] `SettingResource` (Key-value global settings page)
+- [ ] RBAC: Lock Settings panel to `super_admin` only; editors can only access content resources
+
+## Phase 5: REST API Endpoints
+- [ ] Create `api.php` routes file
+- [ ] `GET /api/posts` — list published posts (paginated)
+- [ ] `GET /api/posts/{slug}` — single post
+- [ ] `GET /api/services` — list services
+- [ ] `GET /api/services/{slug}` — single service
+- [ ] `GET /api/projects` — list projects (with featured filter)
+- [ ] `GET /api/team` — list team members (ordered)
+- [ ] `GET /api/alumni` — list alumni (grouped by batch)
+- [ ] `GET /api/testimonials` — list active testimonials
+- [ ] `GET /api/partners` — list partners
+- [ ] `GET /api/settings` — return all settings as key-value object
+
+## Phase 6: API Resources & Caching
+- [ ] Create API Resource classes (JSON transformation)
+- [ ] Implement file-based or database caching on all GET endpoints
+- [ ] Auto-clear cache on Filament save (Observer or ModelEvent)
+
+## Phase 7: Security & Production Hardening
+- [ ] Configure rate limiting (throttle middleware — 60 req/min)
+- [ ] Configure CORS (only allow Next.js domain)
+- [ ] Standardize JSON error responses (404, 422, 500)
+- [ ] Add `Accept: application/json` middleware to ensure JSON-only responses
+
+## Phase 8: Seeder & Testing
+- [ ] DatabaseSeeder: seed dummy data for all entities
+- [ ] Manual verification: Filament dashboard CRUD works
+- [ ] Manual verification: API routes return correct JSON
+- [ ] Run `php artisan test` to ensure no regressions
