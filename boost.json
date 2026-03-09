@@ -8,6 +8,8 @@
     "mcp": true,
     "sail": false,
     "skills": [
-        "pest-testing"
+        "livewire-development",
+        "pest-testing",
+        "tailwindcss-development"
     ]
 }
