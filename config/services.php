@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'frontend' => [
+        'url' => env('FRONTEND_URL', 'http://localhost:3000'),
+        'revalidate_url' => env('FRONTEND_REVALIDATE_URL', 'http://localhost:3000/api/revalidate'),
+        'revalidate_secret' => env('FRONTEND_REVALIDATE_SECRET', 'change-me-to-a-strong-secret'),
+    ],
+
 ];
