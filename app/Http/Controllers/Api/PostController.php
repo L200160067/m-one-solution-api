@@ -12,9 +12,10 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $cacheKey = 'posts.index.' . md5(serialize($request->query()));
+        $version = Cache::get('posts_version', '1');
+        $cacheKey = "posts.{$version}.index." . md5(serialize($request->query()));
 
-        $data = Cache::tags(['posts'])->remember($cacheKey, 3600, function () use ($request) {
+        $data = Cache::remember($cacheKey, 3600, function () use ($request) {
             return Post::with(['category', 'media'])
                 ->published()
                 ->when($request->category, fn ($q) => $q->whereHas('category', fn ($c) => $c->where('slug', $request->category)))
@@ -27,9 +28,10 @@ class PostController extends Controller
 
     public function show(string $slug)
     {
-        $cacheKey = 'posts.show.' . $slug;
+        $version = Cache::get('posts_version', '1');
+        $cacheKey = "posts.{$version}.show." . $slug;
 
-        $post = Cache::tags(['posts'])->remember($cacheKey, 3600, function () use ($slug) {
+        $post = Cache::remember($cacheKey, 3600, function () use ($slug) {
             return Post::with(['category', 'author', 'media'])
                 ->published()
                 ->where('slug', $slug)

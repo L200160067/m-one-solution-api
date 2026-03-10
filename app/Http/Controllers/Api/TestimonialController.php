@@ -11,7 +11,8 @@ class TestimonialController extends Controller
 {
     public function index()
     {
-        $data = Cache::tags(['testimonials'])->remember('testimonials.index', 3600, function () {
+        $version = Cache::get('testimonials_version', '1');
+        $data = Cache::remember("testimonials.{$version}.index", 3600, function () {
             return Testimonial::with('media')->active()->latest()->get();
         });
 

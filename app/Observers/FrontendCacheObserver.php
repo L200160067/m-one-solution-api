@@ -18,11 +18,15 @@ class FrontendCacheObserver
     protected function clearCache(Model $model)
     {
         try {
-            // Fase 2: Bersihkan Rumah Sendiri Dulu (Observer Fix)
-            $tags = $this->getModelTags($model);
-            if (!empty($tags)) {
-                Cache::tags($tags)->flush();
-                Log::info('Local cache tags cleared.', ['tags' => $tags]);
+            // Fase 2: Bersihkan Rumah Sendiri Dulu (Cache Version Bugfix)
+            $versionKey = $this->getModelVersionKey($model);
+            $tags = []; // Array tags untuk RevalidateFrontendCacheJob tetap kosong dulu atau ditiadakan 
+            
+            if ($versionKey) {
+                Cache::put($versionKey, time());
+                Log::info('Local cache version bumped.', ['version_key' => $versionKey]);
+                // Supaya payload webhook Next.js tetap memiliki nilai 'tags' sebagai identifier entitas
+                $tags = [str_replace('_version', '', $versionKey)];
             }
 
             // Fase 3 & 4: Asynchronous Webhook with Granular Payload
@@ -33,21 +37,21 @@ class FrontendCacheObserver
     }
 
     /**
-     * Map model class to cache tags.
+     * Map model class to cache version key.
      */
-    protected function getModelTags(Model $model): array
+    protected function getModelVersionKey(Model $model): ?string
     {
         $class = get_class($model);
         return match ($class) {
-            \App\Models\Post::class => ['posts'],
-            \App\Models\Setting::class => ['settings'],
-            \App\Models\Service::class => ['services'],
-            \App\Models\Project::class => ['projects'],
-            \App\Models\Testimonial::class => ['testimonials'],
-            \App\Models\TeamMember::class => ['team'],
-            \App\Models\Partner::class => ['partners'],
-            \App\Models\Alumni::class => ['alumni'],
-            default => [],
+            \App\Models\Post::class => 'posts_version',
+            \App\Models\Setting::class => 'settings_version',
+            \App\Models\Service::class => 'services_version',
+            \App\Models\Project::class => 'projects_version',
+            \App\Models\Testimonial::class => 'testimonials_version',
+            \App\Models\TeamMember::class => 'team_version',
+            \App\Models\Partner::class => 'partners_version',
+            \App\Models\Alumni::class => 'alumni_version',
+            default => null,
         };
     }
 

@@ -11,7 +11,8 @@ class PartnerController extends Controller
 {
     public function index()
     {
-        $data = Cache::tags(['partners'])->remember('partners.index', 3600, function () {
+        $version = Cache::get('partners_version', '1');
+        $data = Cache::remember("partners.{$version}.index", 3600, function () {
             return Partner::with('media')->orderBy('order_column')->get();
         });
 

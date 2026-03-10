@@ -13,9 +13,10 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $featured = $request->boolean('featured');
-        $cacheKey = 'projects.index.' . ($featured ? 'featured' : 'all');
+        $version = Cache::get('projects_version', '1');
+        $cacheKey = "projects.{$version}.index." . ($featured ? 'featured' : 'all');
 
-        $data = Cache::tags(['projects'])->remember($cacheKey, 3600, function () use ($featured) {
+        $data = Cache::remember($cacheKey, 3600, function () use ($featured) {
             return Project::with('media')
                 ->when($featured, fn ($q) => $q->featured())
                 ->orderBy('order_column')

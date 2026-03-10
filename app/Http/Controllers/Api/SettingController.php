@@ -10,7 +10,8 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $data = Cache::tags(['settings'])->remember('settings.all', 3600, function () {
+        $version = Cache::get('settings_version', '1');
+        $data = Cache::remember("settings.{$version}.all", 3600, function () {
             return Setting::allAsArray();
         });
 
