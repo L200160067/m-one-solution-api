@@ -57,6 +57,8 @@ class TestimonialResource extends Resource
                     ->label('Foto Profil')
                     ->collection('avatar')
                     ->image()
+                    ->imageEditor()
+                    ->optimize('webp')
                     ->maxSize(2048)
                     ->columnSpanFull(),
             ]),

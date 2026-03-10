@@ -29,7 +29,17 @@ class Project extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(800)->height(600);
+        $this->addMediaConversion('thumb')
+            ->format('webp')
+            ->width(800)
+            ->height(600)
+            ->nonQueued();
+
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->width(1200)
+            ->height(900)
+            ->nonQueued();
     }
 
     public function scopeFeatured($query)

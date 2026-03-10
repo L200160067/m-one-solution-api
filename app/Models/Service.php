@@ -31,6 +31,16 @@ class Service extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(600)->height(400);
+        $this->addMediaConversion('thumb')
+            ->format('webp')
+            ->width(600)
+            ->height(400)
+            ->nonQueued();
+
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->width(1200)
+            ->height(800)
+            ->nonQueued();
     }
 }

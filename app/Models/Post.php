@@ -35,9 +35,17 @@ class Post extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
+            ->format('webp')
             ->width(400)
             ->height(300)
-            ->sharpen(10);
+            ->sharpen(10)
+            ->nonQueued();
+
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->width(1200)
+            ->height(800)
+            ->nonQueued();
     }
 
     public function category(): BelongsTo

@@ -37,6 +37,7 @@ class PartnerResource extends Resource
                 ->collection('logo')
                 ->image()
                 ->imageEditor()
+                ->optimize('webp')
                 ->maxSize(2048)
                 ->columnSpanFull(),
         ]);

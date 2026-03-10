@@ -71,6 +71,7 @@ class ProjectResource extends Resource
                     ->collection('image')
                     ->image()
                     ->imageEditor()
+                    ->optimize('webp')
                     ->maxSize(8192)
                     ->columnSpanFull(),
             ]),
