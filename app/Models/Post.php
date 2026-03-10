@@ -14,27 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class Post extends Model implements HasMedia
 {
-    use SoftDeletes, InteractsWithMedia;
-
-    protected static function booted()
-    {
-        $revalidateNextJs = function () {
-            try {
-                // Next.js Webhook URL
-                $webhookUrl = env('NEXT_JS_URL', 'http://localhost:3000') . '/api/revalidate';
-                
-                Http::post($webhookUrl, [
-                    'secret' => env('NEXT_REVALIDATE_SECRET', 'change-me-to-a-strong-secret'),
-                    'tags' => ['posts'] // Optional Next.js 14 tag revalidation
-                ]);
-            } catch (\Exception $e) {
-                Log::error('Failed to ping Next.js Webhook: ' . $e->getMessage());
-            }
-        };
-
-        static::saved($revalidateNextJs);
-        static::deleted($revalidateNextJs);
-    }
+    use SoftDeletes, InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
 
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',

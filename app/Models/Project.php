@@ -9,7 +9,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Project extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
+
+    public $nextJsCacheTag = 'projects';
 
     protected $fillable = [
         'title', 'slug', 'category', 'description',

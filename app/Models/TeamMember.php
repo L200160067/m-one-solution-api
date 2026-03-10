@@ -8,7 +8,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class TeamMember extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
+
+    public $nextJsCacheTag = 'team';
 
     protected $fillable = [
         'name', 'role', 'social_linkedin',

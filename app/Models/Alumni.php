@@ -8,7 +8,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Alumni extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
+
+    public $nextJsCacheTag = 'alumni';
 
     protected $fillable = [
         'name', 'school', 'batch_period', 'order_column',

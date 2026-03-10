@@ -8,7 +8,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Testimonial extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
 
     protected $fillable = [
         'name', 'role', 'company', 'content', 'rating', 'is_active',
