@@ -11,7 +11,7 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $data = Cache::remember('team.index', 3600, function () {
+        $data = Cache::tags(['team'])->remember('team.index', 3600, function () {
             return TeamMember::with('media')->orderBy('order_column')->get();
         });
 

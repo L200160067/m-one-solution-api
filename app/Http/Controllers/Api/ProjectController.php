@@ -15,7 +15,7 @@ class ProjectController extends Controller
         $featured = $request->boolean('featured');
         $cacheKey = 'projects.index.' . ($featured ? 'featured' : 'all');
 
-        $data = Cache::remember($cacheKey, 3600, function () use ($featured) {
+        $data = Cache::tags(['projects'])->remember($cacheKey, 3600, function () use ($featured) {
             return Project::with('media')
                 ->when($featured, fn ($q) => $q->featured())
                 ->orderBy('order_column')

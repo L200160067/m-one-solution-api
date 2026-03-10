@@ -2,14 +2,15 @@
 
 namespace App\Observers;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Jobs\RevalidateFrontendCacheJob;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class FrontendCacheObserver
 {
     /**
-     * Clear the frontend cache for the model.
+     * Clear the local cache tags and dispatch frontend revalidation job.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
@@ -17,32 +18,37 @@ class FrontendCacheObserver
     protected function clearCache(Model $model)
     {
         try {
-            $url = config('services.frontend.revalidate_url');
-            $secret = config('services.frontend.revalidate_secret');
-
-            if ($url && $secret) {
-                $response = Http::get($url, [
-                    'secret' => $secret
-                ]);
-
-                if ($response->failed()) {
-                    Log::error('Failed to clear frontend cache', [
-                        'model' => get_class($model),
-                        'id' => $model->id ?? null,
-                        'url' => $url,
-                        'status' => $response->status(),
-                        'body' => $response->body()
-                    ]);
-                } else {
-                    Log::info('Frontend cache cleared successfully.', [
-                        'model' => get_class($model),
-                        'id' => $model->id ?? null,
-                    ]);
-                }
+            // Fase 2: Bersihkan Rumah Sendiri Dulu (Observer Fix)
+            $tags = $this->getModelTags($model);
+            if (!empty($tags)) {
+                Cache::tags($tags)->flush();
+                Log::info('Local cache tags cleared.', ['tags' => $tags]);
             }
+
+            // Fase 3 & 4: Asynchronous Webhook with Granular Payload
+            RevalidateFrontendCacheJob::dispatch(get_class($model), $model->id, $tags);
         } catch (\Exception $e) {
-            Log::error('Exception while clearing frontend cache: ' . $e->getMessage());
+            Log::error('Exception while clearing cache: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Map model class to cache tags.
+     */
+    protected function getModelTags(Model $model): array
+    {
+        $class = get_class($model);
+        return match ($class) {
+            \App\Models\Post::class => ['posts'],
+            \App\Models\Setting::class => ['settings'],
+            \App\Models\Service::class => ['services'],
+            \App\Models\Project::class => ['projects'],
+            \App\Models\Testimonial::class => ['testimonials'],
+            \App\Models\TeamMember::class => ['team'],
+            \App\Models\Partner::class => ['partners'],
+            \App\Models\Alumni::class => ['alumni'],
+            default => [],
+        };
     }
 
     public function saved(Model $model): void

@@ -11,7 +11,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $data = Cache::remember('services.index', 3600, function () {
+        $data = Cache::tags(['services'])->remember('services.index', 3600, function () {
             return Service::with('media')->orderBy('order_column')->get();
         });
 
@@ -20,7 +20,7 @@ class ServiceController extends Controller
 
     public function show(string $slug)
     {
-        $service = Cache::remember('services.show.' . $slug, 3600, function () use ($slug) {
+        $service = Cache::tags(['services'])->remember('services.show.' . $slug, 3600, function () use ($slug) {
             return Service::with('media')->where('slug', $slug)->firstOrFail();
         });
 

@@ -14,7 +14,7 @@ class PostController extends Controller
     {
         $cacheKey = 'posts.index.' . md5(serialize($request->query()));
 
-        $data = Cache::remember($cacheKey, 3600, function () use ($request) {
+        $data = Cache::tags(['posts'])->remember($cacheKey, 3600, function () use ($request) {
             return Post::with(['category', 'media'])
                 ->published()
                 ->when($request->category, fn ($q) => $q->whereHas('category', fn ($c) => $c->where('slug', $request->category)))
@@ -29,7 +29,7 @@ class PostController extends Controller
     {
         $cacheKey = 'posts.show.' . $slug;
 
-        $post = Cache::remember($cacheKey, 3600, function () use ($slug) {
+        $post = Cache::tags(['posts'])->remember($cacheKey, 3600, function () use ($slug) {
             return Post::with(['category', 'author', 'media'])
                 ->published()
                 ->where('slug', $slug)

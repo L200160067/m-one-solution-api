@@ -11,7 +11,7 @@ class AlumniController extends Controller
 {
     public function index()
     {
-        $data = Cache::remember('alumni.index', 3600, function () {
+        $data = Cache::tags(['alumni'])->remember('alumni.index', 3600, function () {
             return Alumni::with('media')
                 ->orderByDesc('batch_period')
                 ->orderBy('order_column')
