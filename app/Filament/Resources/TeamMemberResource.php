@@ -58,7 +58,6 @@ class TeamMemberResource extends Resource
                     ->collection('avatar')
                     ->image()
                     ->imageEditor()
-                    ->optimize('webp')
                     ->maxSize(3072)
                     ->columnSpanFull(),
             ]),

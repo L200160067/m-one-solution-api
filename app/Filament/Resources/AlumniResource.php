@@ -45,7 +45,6 @@ class AlumniResource extends Resource
                 ->collection('photo')
                 ->image()
                 ->imageEditor()
-                ->optimize('webp')
                 ->maxSize(2048)
                 ->columnSpanFull(),
         ]);

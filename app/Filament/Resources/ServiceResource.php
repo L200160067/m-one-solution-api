@@ -78,7 +78,6 @@ class ServiceResource extends Resource
                     ->collection('image')
                     ->image()
                     ->imageEditor()
-                    ->optimize('webp')
                     ->maxSize(5120)
                     ->columnSpanFull(),
             ]),

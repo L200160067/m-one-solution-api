@@ -79,7 +79,6 @@ class PostResource extends Resource
                     ->collection('cover')
                     ->image()
                     ->imageEditor()
-                    ->optimize('webp')
                     ->maxSize(5120) // 5 MB
                     ->columnSpanFull(),
             ]),

@@ -58,7 +58,6 @@ class TestimonialResource extends Resource
                     ->collection('avatar')
                     ->image()
                     ->imageEditor()
-                    ->optimize('webp')
                     ->maxSize(2048)
                     ->columnSpanFull(),
             ]),
