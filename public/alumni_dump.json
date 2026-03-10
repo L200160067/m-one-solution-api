@@ -1,0 +1,134 @@
+{
+  "success": true,
+  "data": [
+    {
+      "batch_period": "Batch 2025",
+      "members": [
+        {
+          "id": 1,
+          "name": "Bastian",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/3/01KKAD8HRX6SDZ667A79Q20B3M.webp"
+        },
+        {
+          "id": 2,
+          "name": "Boneta P",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/6/01KKAG27Z711YVE2XF5X9KQYBV.webp"
+        },
+        {
+          "id": 3,
+          "name": "Daffa F",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/10/01KKAGDYT093BYAF5AH2KSEKR0.webp"
+        },
+        {
+          "id": 4,
+          "name": "Denisa R",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/11/01KKAGJT03CWS53HT4BZ899S3D.webp"
+        },
+        {
+          "id": 5,
+          "name": "Faza",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/12/01KKB3BX5R3CQB6JCPQH6YH8MD.webp"
+        },
+        {
+          "id": 6,
+          "name": "Haikal",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/15/01KKB5T46807JCVSCE7AV55Z4K.webp"
+        },
+        {
+          "id": 7,
+          "name": "Iyan",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/25/01KKC8M656NV6SPA3Z7DR6X6DA.webp"
+        },
+        {
+          "id": 8,
+          "name": "Zaydan",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2025",
+          "photo_url": "http://m-one-solution-api.test/storage/26/01KKC8ZTXK196YSXS607HJSZC8.webp"
+        }
+      ]
+    },
+    {
+      "batch_period": "Batch 2024",
+      "members": [
+        {
+          "id": 9,
+          "name": "Abby",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 10,
+          "name": "Afif",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 11,
+          "name": "Arkan",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 12,
+          "name": "Daffa D",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 13,
+          "name": "Dzakwan",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 14,
+          "name": "Habib",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 15,
+          "name": "Hanif",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 16,
+          "name": "Shabri",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        },
+        {
+          "id": 17,
+          "name": "Yudha",
+          "school": "SMK Muhammadiyah 1 Sukoharjo",
+          "batch_period": "Batch 2024",
+          "photo_url": ""
+        }
+      ]
+    }
+  ]
+}
