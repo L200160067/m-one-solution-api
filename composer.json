@@ -12,6 +12,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "league/flysystem-aws-s3-v3": "^3.32",
         "spatie/image-optimizer": "*",
         "spatie/laravel-medialibrary": "^11.21",
         "spatie/laravel-permission": "^7.2"
