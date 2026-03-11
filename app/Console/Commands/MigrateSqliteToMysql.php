@@ -25,7 +25,7 @@ class MigrateSqliteToMysql extends Command
      */
     public function handle()
     {
-        $this->info('Starting data migration from SQLite to MySQL...');
+        $this->info('Starting data migration from SQLite to default DB connection...');
 
         // Define the tables order (respecting foreign key relationships)
         $tables = [
@@ -45,13 +45,11 @@ class MigrateSqliteToMysql extends Command
         // Ensure sqlite connection uses the old database file
         config(['database.connections.sqlite.database' => database_path('database.sqlite')]);
 
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
         foreach ($tables as $table) {
             $this->info("Migrating table: {$table}");
             
-            // Clear existing data in MySQL (Optional, assuming fresh db)
-            \Illuminate\Support\Facades\DB::connection('mysql')->table($table)->truncate();
+            // Clear existing data (Optional, assuming fresh db)
+            \Illuminate\Support\Facades\DB::table($table)->truncate();
 
             // Fetch data from SQLite
             $records = \Illuminate\Support\Facades\DB::connection('sqlite')->table($table)->get()->map(function ($item) {
@@ -66,13 +64,11 @@ class MigrateSqliteToMysql extends Command
             // Insert in chunks to avoid memory limit issues
             $chunks = array_chunk($records, 500);
             foreach ($chunks as $chunk) {
-                \Illuminate\Support\Facades\DB::connection('mysql')->table($table)->insert($chunk);
+                \Illuminate\Support\Facades\DB::table($table)->insert($chunk);
             }
 
             $this->info("Successfully migrated " . count($records) . " records to {$table}");
         }
-
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->info('Migration completed successfully!');
     }
