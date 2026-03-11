@@ -58,8 +58,8 @@ class FrontendCacheObserver
             Project::class => 'projects_version',
             Testimonial::class => 'testimonials_version',
             TeamMember::class => 'team_version',
-            \App\Models\Partner::class => 'partners_version',
-            \App\Models\Alumni::class => 'alumni_version',
+            Partner::class  => 'partners_version',
+            Alumni::class => 'alumni_version',
             default => null,
         };
     }
