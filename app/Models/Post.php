@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\PingsNextJsWebhook;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class Post extends Model implements HasMedia
 {
-    use SoftDeletes, InteractsWithMedia, \App\Traits\PingsNextJsWebhook;
+    use SoftDeletes, InteractsWithMedia, PingsNextJsWebhook;
 
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',
