@@ -6,6 +6,15 @@ use App\Jobs\RevalidateFrontendCacheJob;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Models\Post;
+use App\Models\Category;
+use App\Models\Setting;
+use App\Models\Service;
+use App\Models\Project;
+use App\Models\Testimonial;
+use App\Models\TeamMember;
+use App\Models\Partner;
+use App\Models\Alumni;
 
 class FrontendCacheObserver
 {
@@ -43,12 +52,12 @@ class FrontendCacheObserver
     {
         $class = get_class($model);
         return match ($class) {
-            \App\Models\Post::class => 'posts_version',
-            \App\Models\Setting::class => 'settings_version',
-            \App\Models\Service::class => 'services_version',
-            \App\Models\Project::class => 'projects_version',
-            \App\Models\Testimonial::class => 'testimonials_version',
-            \App\Models\TeamMember::class => 'team_version',
+            Post::class => 'posts_version',
+            Setting::class => 'settings_version',
+            Service::class => 'services_version',
+            Project::class => 'projects_version',
+            Testimonial::class => 'testimonials_version',
+            TeamMember::class => 'team_version',
             \App\Models\Partner::class => 'partners_version',
             \App\Models\Alumni::class => 'alumni_version',
             default => null,
