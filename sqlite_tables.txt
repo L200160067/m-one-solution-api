@@ -1,0 +1,28 @@
+
+=== SQLite Tables ===
+alumnis                                 : 17 rows
+cache                                   : 1 rows
+cache_locks                             : 0 rows
+categories                              : 11 rows
+failed_jobs                             : 0 rows
+job_batches                             : 0 rows
+jobs                                    : 62 rows
+media                                   : 46 rows
+migrations                              : 14 rows
+model_has_permissions                   : 0 rows
+model_has_roles                         : 1 rows
+partners                                : 7 rows
+password_reset_tokens                   : 0 rows
+permissions                             : 0 rows
+posts                                   : 16 rows
+projects                                : 3 rows
+role_has_permissions                    : 0 rows
+roles                                   : 2 rows
+services                                : 5 rows
+sessions                                : 2 rows
+settings                                : 10 rows
+team_members                            : 6 rows
+testimonials                            : 3 rows
+users                                   : 1 rows
+
+Total tables: 24

@@ -51,7 +51,20 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install \
     && npm run build
 
-# Port Default Apache (opsional, tapi disarankan)
+# Buat startup script yang jalankan perintah Laravel sebelum Apache start
+RUN echo '#!/bin/bash\n\
+set -e\n\
+php artisan config:clear\n\
+php artisan config:cache\n\
+php artisan route:cache\n\
+php artisan view:cache\n\
+php artisan storage:link --force 2>/dev/null || true\n\
+php artisan migrate --force 2>/dev/null || true\n\
+apache2-foreground' > /usr/local/bin/startup.sh \
+    && chmod +x /usr/local/bin/startup.sh
+
+# Port Default Apache
 EXPOSE 80
 
-# Tidak butuh CMD karena bawaan image php:8.3-apache sudah menjalankan "apache2-foreground" otomatis
+# Jalankan startup script (bukan langsung apache2-foreground)
+CMD ["/usr/local/bin/startup.sh"]

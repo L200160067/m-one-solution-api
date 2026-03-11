@@ -1,0 +1,21 @@
+SQLite source: D:\GitHub\m-one-solution-api\database\database.sqlite
+Starting SQLite ΓåÆ PostgreSQL migration...
+
+  OK   users ΓÇö 1 rows migrated (cast: is_super_admin, is_sso_user, is_anonymous)
+  OK   roles ΓÇö 2 rows migrated
+  SKIP permissions (0 rows)
+  OK   model_has_roles ΓÇö 1 rows migrated
+  SKIP model_has_permissions (0 rows)
+  SKIP role_has_permissions (0 rows)
+  OK   categories ΓÇö 11 rows migrated
+  OK   services ΓÇö 5 rows migrated
+  OK   projects ΓÇö 3 rows migrated (cast: is_featured)
+  OK   partners ΓÇö 7 rows migrated
+  OK   team_members ΓÇö 6 rows migrated
+  OK   testimonials ΓÇö 3 rows migrated (cast: is_active)
+  OK   posts ΓÇö 16 rows migrated
+  OK   alumnis ΓÇö 17 rows migrated
+  OK   settings ΓÇö 10 rows migrated
+  OK   media ΓÇö 46 rows migrated
+
+Γ£à All tables migrated successfully!

@@ -1,0 +1,14 @@
+=== Boolean cols in 'projects' via command query ===
+array(1) {
+  [0]=>
+  object(stdClass)#2792 (1) {
+    ["column_name"]=>
+    string(11) "is_featured"
+  }
+}
+
+count: 1
+boolCols: Array
+(
+    [0] => is_featured
+)
