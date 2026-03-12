@@ -11,13 +11,13 @@ trait PingsNextJsWebhook
     {
         $revalidateNextJs = function ($model) {
             try {
-                $webhookUrl = env('NEXTJS_URL', 'http://localhost:3000').'/api/revalidate';
+                $webhookUrl = config('services.frontend.revalidate_url');
                 $tag = $model->nextJsCacheTag ?? $model->getTable();
 
                 Http::withOptions([
                     'curl' => [CURLOPT_SSLVERSION => config('services.curl_ssl_version')],
                 ])->post($webhookUrl, [
-                    'secret' => env('NEXTJS_REVALIDATE_SECRET', 'my-secret-token'),
+                    'secret' => config('services.frontend.revalidate_secret'),
                     'type' => 'tag',
                     'payload' => $tag,
                 ]);
