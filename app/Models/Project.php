@@ -14,8 +14,14 @@ class Project extends Model implements HasMedia
     public $nextJsCacheTag = 'projects';
 
     protected $fillable = [
-        'title', 'slug', 'category', 'description',
-        'client_name', 'project_url', 'is_featured', 'order_column',
+        'title',
+        'slug',
+        'category',
+        'description',
+        'client_name',
+        'project_url',
+        'is_featured',
+        'order_column',
     ];
 
     protected $casts = [
@@ -44,6 +50,6 @@ class Project extends Model implements HasMedia
 
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->whereRaw('is_featured = true');
     }
 }
