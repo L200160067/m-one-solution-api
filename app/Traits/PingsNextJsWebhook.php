@@ -11,16 +11,18 @@ trait PingsNextJsWebhook
     {
         $revalidateNextJs = function ($model) {
             try {
-                $webhookUrl = env('NEXTJS_URL', 'http://localhost:3000') . '/api/revalidate';
+                $webhookUrl = env('NEXTJS_URL', 'http://localhost:3000').'/api/revalidate';
                 $tag = $model->nextJsCacheTag ?? $model->getTable();
-                
-                Http::post($webhookUrl, [
+
+                Http::withOptions([
+                    'curl' => [CURLOPT_SSLVERSION => config('services.curl_ssl_version')],
+                ])->post($webhookUrl, [
                     'secret' => env('NEXTJS_REVALIDATE_SECRET', 'my-secret-token'),
                     'type' => 'tag',
-                    'payload' => $tag
+                    'payload' => $tag,
                 ]);
             } catch (\Exception $e) {
-                Log::error('Failed to ping Next.js Webhook for ' . class_basename($model) . ': ' . $e->getMessage());
+                Log::error('Failed to ping Next.js Webhook for '.class_basename($model).': '.$e->getMessage());
             }
         };
 

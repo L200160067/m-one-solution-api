@@ -15,7 +15,9 @@ class RevalidateFrontendCacheJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $modelClass;
+
     public $modelId;
+
     public $tags;
 
     /**
@@ -43,10 +45,12 @@ class RevalidateFrontendCacheJob implements ShouldQueue
                     'secret' => $secret,
                     'model' => class_basename($this->modelClass),
                     'id' => $this->modelId,
-                    'tags' => $this->tags
+                    'tags' => $this->tags,
                 ];
 
-                $response = Http::post($url, $payload);
+                $response = Http::withOptions([
+                    'curl' => [CURLOPT_SSLVERSION => config('services.curl_ssl_version')],
+                ])->post($url, $payload);
 
                 if ($response->failed()) {
                     Log::error('Failed to clear frontend cache', [
@@ -54,18 +58,18 @@ class RevalidateFrontendCacheJob implements ShouldQueue
                         'id' => $this->modelId,
                         'url' => $url,
                         'status' => $response->status(),
-                        'body' => $response->body()
+                        'body' => $response->body(),
                     ]);
                 } else {
                     Log::info('Frontend cache cleared successfully.', [
                         'model' => $this->modelClass,
                         'id' => $this->modelId,
-                        'tags' => $this->tags
+                        'tags' => $this->tags,
                     ]);
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Exception while clearing frontend cache: ' . $e->getMessage());
+            Log::error('Exception while clearing frontend cache: '.$e->getMessage());
         }
     }
 }

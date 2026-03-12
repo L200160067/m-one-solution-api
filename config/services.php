@@ -41,4 +41,10 @@ return [
         'revalidate_secret' => env('FRONTEND_REVALIDATE_SECRET', 'change-me-to-a-strong-secret'),
     ],
 
+    /*
+    | CURL SSL/TLS version for outbound HTTP (Guzzle). Use numeric 6 when
+    | CURL_SSLVERSION_TLSv1_2 is not defined (e.g. some shared hosting).
+    */
+    'curl_ssl_version' => defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : 6,
+
 ];
