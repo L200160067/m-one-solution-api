@@ -76,6 +76,7 @@ class ServiceResource extends Resource
                 SpatieMediaLibraryFileUpload::make('image')
                     ->label('Gambar Layanan')
                     ->collection('image')
+                    ->disk('public')
                     ->image()
                     ->imageEditor()
                     ->maxSize(5120)

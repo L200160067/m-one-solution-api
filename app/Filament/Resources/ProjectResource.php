@@ -69,6 +69,7 @@ class ProjectResource extends Resource
                 SpatieMediaLibraryFileUpload::make('image')
                     ->label('Gambar')
                     ->collection('image')
+                    ->disk('public')
                     ->image()
                     ->imageEditor()
                     ->maxSize(8192)

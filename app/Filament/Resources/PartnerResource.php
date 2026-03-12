@@ -35,6 +35,7 @@ class PartnerResource extends Resource
             SpatieMediaLibraryFileUpload::make('logo')
                 ->label('Logo Mitra')
                 ->collection('logo')
+                ->disk('public')
                 ->image()
                 ->imageEditor()
                 ->maxSize(2048)

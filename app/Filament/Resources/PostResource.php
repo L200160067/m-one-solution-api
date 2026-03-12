@@ -77,6 +77,7 @@ class PostResource extends Resource
                 SpatieMediaLibraryFileUpload::make('cover')
                     ->label('Gambar Cover Artikel')
                     ->collection('cover')
+                    ->disk('public')
                     ->image()
                     ->imageEditor()
                     ->maxSize(5120) // 5 MB

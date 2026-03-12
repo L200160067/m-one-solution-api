@@ -56,6 +56,7 @@ class TeamMemberResource extends Resource
                 SpatieMediaLibraryFileUpload::make('avatar')
                     ->label('Foto Profil')
                     ->collection('avatar')
+                    ->disk('public')
                     ->image()
                     ->imageEditor()
                     ->maxSize(3072)

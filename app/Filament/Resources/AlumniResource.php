@@ -43,6 +43,7 @@ class AlumniResource extends Resource
             SpatieMediaLibraryFileUpload::make('photo')
                 ->label('Foto')
                 ->collection('photo')
+                ->disk('public')
                 ->image()
                 ->imageEditor()
                 ->maxSize(2048)
