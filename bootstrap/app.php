@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('CURL_SSLVERSION_TLSv1_2')) {
+    define('CURL_SSLVERSION_TLSv1_2', 6);
+}
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
