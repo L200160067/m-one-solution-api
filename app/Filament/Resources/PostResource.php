@@ -83,6 +83,23 @@ class PostResource extends Resource
                     ->maxSize(5120) // 5 MB
                     ->columnSpanFull(),
             ]),
+
+            Forms\Components\Section::make('SEO Meta')->schema([
+                Forms\Components\TextInput::make('meta_title')
+                    ->label('Meta Title (maks 70 karakter)')
+                    ->maxLength(70)
+                    ->placeholder('Biarkan kosong untuk menggunakan Judul Artikel')
+                    ->helperText('Judul yang muncul di hasil pencarian Google. Idealnya 50-60 karakter.')
+                    ->columnSpanFull(),
+
+                Forms\Components\Textarea::make('meta_description')
+                    ->label('Meta Description (maks 160 karakter)')
+                    ->maxLength(160)
+                    ->rows(3)
+                    ->placeholder('Biarkan kosong untuk menggunakan Ringkasan')
+                    ->helperText('Deskripsi singkat yang tampil di bawah judul di halaman Google. Idealnya 120-158 karakter.')
+                    ->columnSpanFull(),
+            ])->icon('heroicon-o-magnifying-glass')->collapsed(),
         ]);
     }
 
